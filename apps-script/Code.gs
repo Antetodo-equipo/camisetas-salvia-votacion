@@ -22,13 +22,24 @@ function json_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
 
-// Devuelve solo los lugares, sin nombres
+function notas_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getSheetByName('Notas');
+  if (!s) { s = ss.insertSheet('Notas'); s.appendRow(['Fecha', 'Nombre', 'Nota']); }
+  return s;
+}
+
+// Devuelve los lugares sin nombres, y las notas con nombre
 function doGet() {
   var rows = hoja_().getDataRange().getValues().slice(1);
   var votes = rows.map(function (r) {
     return { first: idDe_(r[2]), second: idDe_(r[3]), third: idDe_(r[4]) };
   }).filter(function (v) { return v.first && v.second && v.third; });
-  return json_({ votes: votes });
+  var nrows = notas_().getDataRange().getValues().slice(1).slice(-100);
+  var notes = nrows.map(function (r) {
+    return { name: String(r[1]), text: String(r[2]), at: new Date(r[0]).getTime() };
+  });
+  return json_({ votes: votes, notes: notes });
 }
 
 // Un voto por nombre: si el nombre ya votó, se actualiza su fila
@@ -38,6 +49,12 @@ function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
     var name = String(d.name || '').trim().slice(0, 40);
+    if (d.type === 'note') {
+      var texto = String(d.text || '').trim().slice(0, 300);
+      if (!name || !texto) return json_({ ok: false });
+      notas_().appendRow([new Date(), name, "'" + texto]);
+      return json_({ ok: true });
+    }
     var p = [d.first, d.second, d.third];
     var valido = name && p.every(function (x) { return LABELS[x]; }) && p[0] !== p[1] && p[0] !== p[2] && p[1] !== p[2];
     if (!valido) return json_({ ok: false });

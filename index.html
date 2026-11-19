@@ -133,6 +133,29 @@ main{padding-bottom:230px!important}
 .num:hover{transform:scale(1.08)}
 .num.on{background:var(--k);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--k) 25%,transparent)}
 @media(max-width:600px){.num{width:30%;max-width:92px;height:62px;border-radius:18px}}
+.opts{max-width:1080px!important}
+.opt img{background:none!important;border-radius:0!important}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.shots{grid-template-columns:1fr}}
+.shot{margin:0;cursor:zoom-in;background:rgba(255,255,255,.6);border-radius:18px;padding:10px 10px 8px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.shot:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.shot img{width:100%;height:auto;display:block}
+.shot figcaption{font-size:13px;font-weight:600;color:#3F2314}
+.lbs{width:100%;height:100%;overflow:auto;display:flex;-webkit-overflow-scrolling:touch}
+.lb img{margin:auto;max-width:100%;max-height:100%;border-radius:0;background:none;box-shadow:none;cursor:zoom-in;flex:none}
+.lb img.z{max-width:none;max-height:none;width:min(2200px,230vw);cursor:zoom-out}
+.lb .lbs{background:#F7E8CF;border-radius:12px}
+.ready{position:fixed;top:0;left:0;right:0;z-index:70;background:var(--gold);color:#3b2410;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));padding-top:calc(10px + env(safe-area-inset-top,0px));display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.ready[hidden]{display:none}
+.ready .main{background:#3F2314;color:#fff;padding:10px 22px}
+.ready.done{background:#2F8F7E;color:#fff}
+.notes{margin-top:34px;padding-top:24px;border-top:2px solid var(--line)}
+.note1{background:var(--bg);border-radius:14px;padding:10px 14px;margin-top:10px}
+.note1 b{font-size:15px}.note1 p{margin:2px 0 0;overflow-wrap:anywhere}
+textarea{font:inherit;color:var(--fg);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%;resize:vertical;display:block}
+textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.notebtn{padding:10px 22px!important;font-size:16px!important;background:var(--accent)!important;color:var(--accent-fg)!important}
+.notebtn:disabled{opacity:.4}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -150,11 +173,11 @@ main{padding-bottom:230px!important}
   <div class="note" id="offline" hidden>No se pudo conectar con la votación. Revisa tu internet e intenta de nuevo en un momento.</div>
 
   <h2><i>1</i>Elige tus favoritas</h2>
-  <p class="hint">Debajo de cada camiseta toca el número del lugar donde la quieres: 1 es la que más te gusta. Con «Ver grande» la ves en pantalla completa.</p>
+  <p class="hint">Debajo de cada camiseta toca el número del lugar donde la quieres: 1 es la que más te gusta. Toca cualquier camiseta para verla en pantalla completa y acercarla.</p>
 <div class="opts" id="opts" style="margin-top:8px">
-    <div class="opt" data-id="o1" aria-label="Opción 1, Pulpo en plumilla"><span class="rank"></span><span class="zoom" role="button" tabindex="0" aria-label="Ver grande">🔍 Ver grande</span><img alt="Camiseta con pulpo en plumilla, frente y espalda" src="img/o1.jpg"><span class="tag">Opción 1</span><h3>Pulpo en plumilla</h3><p>Rojo y azul · ilustración detallada</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
-    <div class="opt" data-id="o2" aria-label="Opción 2, Estampilla de langosta"><span class="rank"></span><span class="zoom" role="button" tabindex="0" aria-label="Ver grande">🔍 Ver grande</span><img alt="Camiseta con estampilla de langosta, frente y espalda" src="img/o2.jpg"><span class="tag brand-tag">Opción 2 · colores de marca</span><h3>Estampilla de langosta</h3><p>Terracota y verde salvia</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
-    <div class="opt" data-id="o3" aria-label="Opción 3, Sellos verde azulado"><span class="rank"></span><span class="zoom" role="button" tabindex="0" aria-label="Ver grande">🔍 Ver grande</span><img alt="Camiseta con sellos verde azulado, frente y espalda" src="img/o3.jpg"><span class="tag">Opción 3</span><h3>Sellos verde azulado</h3><p>Una tinta de marca · gráfico y moderno</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
+    <div class="opt" data-id="o1" aria-label="Opción 1, Pulpo en plumilla"><span class="rank"></span><div class="shots"><figure class="shot" data-v="back" data-cap="Pulpo en plumilla · Espalda"><img alt="Pulpo en plumilla, espalda" src="img/o1-back.webp"><figcaption>Espalda · toca para ampliar</figcaption></figure><figure class="shot" data-v="front" data-cap="Pulpo en plumilla · Frente"><img alt="Pulpo en plumilla, frente" src="img/o1-front.webp"><figcaption>Frente · toca para ampliar</figcaption></figure></div><span class="tag">Opción 1</span><h3>Pulpo en plumilla</h3><p>Rojo y azul · ilustración detallada</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
+    <div class="opt" data-id="o2" aria-label="Opción 2, Estampilla de langosta"><span class="rank"></span><div class="shots"><figure class="shot" data-v="back" data-cap="Estampilla de langosta · Espalda"><img alt="Estampilla de langosta, espalda" src="img/o2-back.webp"><figcaption>Espalda · toca para ampliar</figcaption></figure><figure class="shot" data-v="front" data-cap="Estampilla de langosta · Frente"><img alt="Estampilla de langosta, frente" src="img/o2-front.webp"><figcaption>Frente · toca para ampliar</figcaption></figure></div><span class="tag brand-tag">Opción 2 · colores de marca</span><h3>Estampilla de langosta</h3><p>Terracota y verde salvia</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
+    <div class="opt" data-id="o3" aria-label="Opción 3, Sellos verde azulado"><span class="rank"></span><div class="shots"><figure class="shot" data-v="back" data-cap="Sellos verde azulado · Espalda"><img alt="Sellos verde azulado, espalda" src="img/o3-back.webp"><figcaption>Espalda · toca para ampliar</figcaption></figure><figure class="shot" data-v="front" data-cap="Sellos verde azulado · Frente"><img alt="Sellos verde azulado, frente" src="img/o3-front.webp"><figcaption>Frente · toca para ampliar</figcaption></figure></div><span class="tag">Opción 3</span><h3>Sellos verde azulado</h3><p>Una tinta de marca · gráfico y moderno</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
   </div>
 
   <p class="status" id="status" role="status"></p>
@@ -164,9 +187,17 @@ main{padding-bottom:230px!important}
     <p class="hint">1.er lugar vale 3 puntos, 2.º vale 2 y 3.º vale 1.</p>
     <div class="bars" id="bars"></div>
     <p class="votes" id="count"></p>
+    <div class="notes">
+      <h2 style="font-size:22px">Notas del equipo</h2>
+      <div id="notelist"></div>
+      <label for="nt" style="display:block;margin-top:16px">Deja una nota (opcional)</label>
+      <textarea id="nt" maxlength="300" rows="3" placeholder="Ej. Me gusta la 2 pero con el logo más grande"></textarea>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px"><button class="main notebtn" id="notesend" type="button">Publicar nota</button><span class="status" id="notest" role="status" style="margin:0;font-size:15px"></span></div>
+    </div>
   </section>
 </main>
 <canvas id="fx"></canvas>
+<div class="ready" id="ready" hidden><span id="readytxt">¡Podio completo! Ya puedes enviar.</span><button class="main" id="send2" type="button">Enviar mi voto</button></div>
 <div class="gate" id="gate"><form class="gbox" id="gform">
   <div class="brand">Salvia Blanca · Cocina campestre</div>
   <h2 style="margin:10px 0 6px;font-size:clamp(28px,7vw,42px);line-height:1;letter-spacing:-.03em">Antes de empezar</h2>
@@ -175,7 +206,7 @@ main{padding-bottom:230px!important}
   <input id="nm" autocomplete="given-name" maxlength="40" placeholder="Ej. Mariana" required>
   <button class="main go" type="submit" id="gbtn" disabled>Empezar a votar</button>
 </form></div>
-<div class="lb" id="lb" hidden><button class="lbx" id="lbx" type="button" aria-label="Cerrar">✕</button><button class="lbn lbp" id="lbp" type="button" aria-label="Anterior">‹</button><img id="lbi" alt=""><button class="lbn lbq" id="lbq" type="button" aria-label="Siguiente">›</button><div class="lbt" id="lbt"></div></div>
+<div class="lb" id="lb" hidden><button class="lbx" id="lbx" type="button" aria-label="Cerrar">✕</button><button class="lbn lbp" id="lbp" type="button" aria-label="Anterior">‹</button><div class="lbs" id="lbs"><img id="lbi" alt=""></div><button class="lbn lbq" id="lbq" type="button" aria-label="Siguiente">›</button><div class="lbt" id="lbt"></div></div>
 <div class="bar-fixed"><div class="bar-in">
   <div class="podium" id="podium"><div class="pod" data-slot="0"></div><div class="pod" data-slot="1"></div><div class="pod" data-slot="2"></div></div>
   <div class="prog" id="prog">Elige tu 1.er lugar</div>
@@ -183,11 +214,10 @@ main{padding-bottom:230px!important}
 </div></div>
 
 <script>
-const ENDPOINT='';
 const OPTS=[{id:'o1',name:'Pulpo en plumilla',img:null},{id:'o2',name:'Estampilla de langosta'},{id:'o3',name:'Sellos verde azulado'}];
 const NAME=Object.fromEntries(OPTS.map(o=>[o.id,o.name]));
 const LAB=['1.er lugar','2.º lugar','3.er lugar'];
-let slots=[null,null,null],all=[],loaded=false,myName='';
+let slots=[null,null,null],db=null,uid=null,all=[],loaded=false,myName='';
 const $=s=>document.querySelector(s);
 const cards=[...document.querySelectorAll('.opt')];
 const pods=[...document.querySelectorAll('.pod')];
@@ -204,7 +234,9 @@ function paint(){
   $('#prog').textContent=n===3?'Podio completo. Ya puedes enviar.':'Elige tu '+LAB[slots.indexOf(null)];
   validate();
 }
-function validate(){$('#send').disabled=!(slots.every(Boolean)&&myName&&ENDPOINT)}
+let backendReady=false,sentKey='',notes=[];
+function validate(){const ok=slots.every(Boolean)&&myName&&backendReady;$('#send').disabled=$('#send2').disabled=!ok;
+  const r=$('#ready');if(!r.classList.contains('done'))r.hidden=!(ok&&sentKey!==slots.join())}
 function autofill(){
   if(slots.filter(Boolean).length===2){const rest=OPTS.find(o=>!slots.includes(o.id));slots[slots.indexOf(null)]=rest.id}
 }
@@ -219,16 +251,29 @@ function place(id,to){ // to: índice o undefined = primer hueco
 }
 pods.forEach(p=>p.addEventListener('click',()=>{if(p.dataset.id){slots[+p.dataset.slot]=null;paint()}}));
 $('#reset').onclick=()=>{slots=[null,null,null];$('#status').textContent='';paint()};
-$('#send').onclick=async()=>{
-  const b=$('#send');b.disabled=true;
+async function sendVote(){
+  const k=slots.join();$('#send').disabled=$('#send2').disabled=true;
   try{
-    const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name:myName,first:slots[0],second:slots[1],third:slots[2]})});
-    const j=await r.json();if(!j.ok)throw new Error('x');
-    try{localStorage.setItem('sb-vote',JSON.stringify(slots))}catch(e){}
-    load();
-    const s=$('#status');s.className='status ok';s.textContent='¡Listo! Tu voto quedó guardado. Gracias.';confetti();
-  }catch(e){const s=$('#status');s.className='status';s.textContent='No se pudo guardar el voto. Intenta de nuevo.';validate()}
-};
+    await saveVote({name:myName,first:slots[0],second:slots[1],third:slots[2]});
+    sentKey=k;const s=$('#status');s.className='status ok';s.textContent='¡Listo! Tu voto quedó guardado. Gracias.';confetti();
+    const r=$('#ready');r.classList.add('done');$('#readytxt').textContent='¡Voto guardado! Gracias.';$('#send2').hidden=true;r.hidden=false;
+    setTimeout(()=>{r.classList.remove('done');r.hidden=true;$('#send2').hidden=false;$('#readytxt').textContent='¡Podio completo! Ya puedes enviar.';validate()},4500);
+  }catch(e){const s=$('#status');s.className='status';s.textContent='No se pudo guardar el voto. Intenta de nuevo.'}
+  validate();
+}
+$('#send').onclick=sendVote;$('#send2').onclick=sendVote;
+function renderNotes(){const el=$('#notelist');el.textContent='';
+  const l=[...notes].filter(n=>n&&n.text).sort((a,b)=>(b.at||0)-(a.at||0));
+  if(!l.length){const p=document.createElement('p');p.className='hint';p.textContent='Aún no hay notas.';el.appendChild(p);return}
+  l.forEach(n=>{const d=document.createElement('div');d.className='note1';const b=document.createElement('b');b.textContent=n.name||'Alguien';const s=document.createElement('p');s.textContent=n.text;d.append(b,s);el.appendChild(d)})}
+$('#notesend').onclick=async()=>{
+  const tx=$('#nt').value.trim(),st=$('#notest');
+  if(!myName){st.className='status';st.textContent='Primero escribe tu nombre al inicio.';return}
+  if(!tx||!backendReady)return;
+  $('#notesend').disabled=true;
+  try{await saveNote({name:myName,text:tx.slice(0,300)});$('#nt').value='';st.className='status ok';st.textContent='Nota publicada.'}
+  catch(e){st.className='status';st.textContent='No se pudo publicar la nota.'}
+  $('#notesend').disabled=false};
 function confetti(){
   const c=$('#fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
@@ -244,11 +289,12 @@ function results(){
   $('#count').textContent=all.length?`${all.length} ${all.length===1?'persona ha votado':'personas han votado'}.`:'Aún no hay votos. Sé la primera persona en votar.';
 }
 cards.forEach(c=>c.querySelectorAll('.num').forEach(b=>b.addEventListener('click',()=>place(c.dataset.id,+b.dataset.n))));
+const SHOTS=[...document.querySelectorAll('.shot[data-v=back]'),...document.querySelectorAll('.shot[data-v=front]')];
 let lbI=0;
-function lb(i){lbI=(i+3)%3;const c=cards[lbI];$('#lbi').src=c.querySelector('img').src;$('#lbt').textContent=c.querySelector('h3').textContent+' · '+(lbI+1)+' de 3';$('#lb').hidden=false}
-cards.forEach((c,i)=>{const z=c.querySelector('.zoom');const go=e=>{e.stopPropagation();e.preventDefault();lb(i)};z.addEventListener('click',go);z.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go(e)})});
+function lb(i){lbI=(i+SHOTS.length)%SHOTS.length;const s=SHOTS[lbI];const im=$('#lbi');im.classList.remove('z');im.src=s.querySelector('img').src;$('#lbs').scrollTo(0,0);$('#lbt').textContent=s.dataset.cap+' · '+(lbI+1)+' de '+SHOTS.length+' · toca la imagen para acercar';$('#lb').hidden=false}
+SHOTS.forEach((s,i)=>{s.tabIndex=0;s.addEventListener('click',()=>lb(i));s.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();lb(i)}})});
 $('#lbx').onclick=()=>$('#lb').hidden=true;$('#lbp').onclick=e=>{e.stopPropagation();lb(lbI-1)};$('#lbq').onclick=e=>{e.stopPropagation();lb(lbI+1)};
-$('#lb').addEventListener('click',e=>{if(e.target.id==='lb'||e.target.id==='lbi')$('#lb').hidden=true});
+$('#lbs').addEventListener('click',e=>{if(e.target.id==='lbi')e.target.classList.toggle('z');else $('#lb').hidden=true});
 addEventListener('keydown',e=>{if($('#lb').hidden)return;if(e.key==='Escape')$('#lb').hidden=true;if(e.key==='ArrowLeft')lb(lbI-1);if(e.key==='ArrowRight')lb(lbI+1)});
 try{const n=localStorage.getItem('sb-name');if(n)$('#nm').value=n}catch(e){}
 $('#nm').addEventListener('input',()=>{$('#gbtn').disabled=!$('#nm').value.trim()});
@@ -256,16 +302,22 @@ $('#gbtn').disabled=!$('#nm').value.trim();
 $('#gform').addEventListener('submit',e=>{e.preventDefault();const n=$('#nm').value.trim();if(!n)return;myName=n;
   try{localStorage.setItem('sb-name',n)}catch(x){}
   $('#gate').hidden=true;$('#status').textContent='Votando como '+n+'.';$('#status').className='status';validate();scrollTo(0,0)});
-results();paint();
+results();renderNotes();paint();
+/*BACKEND*/
+const ENDPOINT='';
+async function post(o){const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)});const j=await r.json();if(!j.ok)throw new Error('x')}
+async function saveVote(p){await post(p);try{localStorage.setItem('sb-vote',JSON.stringify(slots))}catch(e){}load()}
+async function saveNote(p){await post({...p,type:'note'});load()}
 async function load(){
   try{
     const r=await fetch(ENDPOINT+'?t='+Date.now());const j=await r.json();
-    all=(j.votes||[]).filter(v=>v&&v.first);results();$('#offline').hidden=true;
+    all=(j.votes||[]).filter(v=>v&&v.first);notes=j.notes||[];results();renderNotes();$('#offline').hidden=true;
   }catch(e){if(!all.length)$('#offline').hidden=false}
 }
-try{const sv=JSON.parse(localStorage.getItem('sb-vote')||'null');if(Array.isArray(sv)&&sv.length===3&&sv.every(x=>NAME[x])){slots=sv;paint();
+try{const sv=JSON.parse(localStorage.getItem('sb-vote')||'null');if(Array.isArray(sv)&&sv.length===3&&sv.every(x=>NAME[x])){slots=sv;sentKey=slots.join();paint();
   $('#status').className='status ok';$('#status').textContent='Ya votaste desde este dispositivo. Puedes cambiar tu podio y volver a enviar.'}}catch(e){}
-if(ENDPOINT){load();setInterval(load,20000)}else{$('#offline').textContent='La votación todavía no está conectada.';$('#offline').hidden=false}
+if(ENDPOINT){backendReady=true;validate();load();setInterval(load,20000)}else{$('#offline').textContent='La votación todavía no está conectada.';$('#offline').hidden=false}
+/*END*/
 </script>
 
 </body></html>
