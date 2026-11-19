@@ -29,11 +29,11 @@ function notas_() {
   return s;
 }
 
-// Devuelve los lugares sin nombres, y las notas con nombre
+// Devuelve votos (nombre, hora y lugares) y notas (nombre, hora y texto)
 function doGet() {
   var rows = hoja_().getDataRange().getValues().slice(1);
   var votes = rows.map(function (r) {
-    return { first: idDe_(r[2]), second: idDe_(r[3]), third: idDe_(r[4]) };
+    return { name: String(r[1]), at: new Date(r[0]).getTime(), first: idDe_(r[2]), second: idDe_(r[3]), third: idDe_(r[4]) };
   }).filter(function (v) { return v.first && v.second && v.third; });
   var nrows = notas_().getDataRange().getValues().slice(1).slice(-100);
   var notes = nrows.map(function (r) {
@@ -52,7 +52,9 @@ function doPost(e) {
     if (d.type === 'note') {
       var texto = String(d.text || '').trim().slice(0, 300);
       if (!name || !texto) return json_({ ok: false });
-      notas_().appendRow([new Date(), name, "'" + texto]);
+      var n = notas_();
+      n.appendRow([new Date(), name, "'" + texto]);
+      n.getRange(n.getLastRow(), 1).setNumberFormat('dd/MM/yyyy HH:mm:ss');
       return json_({ ok: true });
     }
     var p = [d.first, d.second, d.third];
@@ -66,7 +68,8 @@ function doPost(e) {
     }
     var vals = [new Date(), name, LABELS[p[0]], LABELS[p[1]], LABELS[p[2]]];
     if (fila > 0) s.getRange(fila, 1, 1, 5).setValues([vals]);
-    else s.appendRow(vals);
+    else { s.appendRow(vals); fila = s.getLastRow(); }
+    s.getRange(fila, 1).setNumberFormat('dd/MM/yyyy HH:mm:ss');
     return json_({ ok: true });
   } catch (err) {
     return json_({ ok: false });

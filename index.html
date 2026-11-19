@@ -150,6 +150,8 @@ main{padding-bottom:230px!important}
 .ready .main{background:#3F2314;color:#fff;padding:10px 22px}
 .ready.done{background:#2F8F7E;color:#fff}
 .notes{margin-top:34px;padding-top:24px;border-top:2px solid var(--line)}
+.when{font-weight:400;color:var(--muted);font-size:13px}
+.voter{display:inline-block;margin:8px 8px 0 0;padding:6px 14px}
 .note1{background:var(--bg);border-radius:14px;padding:10px 14px;margin-top:10px}
 .note1 b{font-size:15px}.note1 p{margin:2px 0 0;overflow-wrap:anywhere}
 textarea{font:inherit;color:var(--fg);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%;resize:vertical;display:block}
@@ -187,6 +189,7 @@ textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
     <p class="hint">1.er lugar vale 3 puntos, 2.º vale 2 y 3.º vale 1.</p>
     <div class="bars" id="bars"></div>
     <p class="votes" id="count"></p>
+    <div class="voters"><h2 style="font-size:22px;margin-top:22px">Quién ha votado</h2><div id="voterlist"></div></div>
     <div class="notes">
       <h2 style="font-size:22px">Notas del equipo</h2>
       <div id="notelist"></div>
@@ -265,7 +268,7 @@ $('#send').onclick=sendVote;$('#send2').onclick=sendVote;
 function renderNotes(){const el=$('#notelist');el.textContent='';
   const l=[...notes].filter(n=>n&&n.text).sort((a,b)=>(b.at||0)-(a.at||0));
   if(!l.length){const p=document.createElement('p');p.className='hint';p.textContent='Aún no hay notas.';el.appendChild(p);return}
-  l.forEach(n=>{const d=document.createElement('div');d.className='note1';const b=document.createElement('b');b.textContent=n.name||'Alguien';const s=document.createElement('p');s.textContent=n.text;d.append(b,s);el.appendChild(d)})}
+  l.forEach(n=>{const d=document.createElement('div');d.className='note1';const b=document.createElement('b');b.textContent=n.name||'Alguien';const w=document.createElement('span');w.className='when';w.textContent=n.at?' · '+fmt(n.at):'';b.appendChild(w);const s=document.createElement('p');s.textContent=n.text;d.append(b,s);el.appendChild(d)})}
 $('#notesend').onclick=async()=>{
   const tx=$('#nt').value.trim(),st=$('#notest');
   if(!myName){st.className='status';st.textContent='Primero escribe tu nombre al inicio.';return}
@@ -281,12 +284,17 @@ function confetti(){
   const p=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight*.7,vx:(Math.random()-.5)*16,vy:-Math.random()*18-6,s:6+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
   let f=0;(function tick(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.vy+=.45;q.x+=q.vx;q.y+=q.vy;q.r+=q.vr;x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/2,q.s,q.s*.6);x.restore()});if(++f<140)requestAnimationFrame(tick);else x.clearRect(0,0,c.width,c.height)})();
 }
+const fmt=ms=>ms?new Date(ms).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'';
+function renderVoters(){const el=$('#voterlist');if(!el)return;el.textContent='';
+  const l=[...all].filter(v=>v&&v.name).sort((a,b)=>(b.at||0)-(a.at||0));
+  if(!l.length){const p=document.createElement('p');p.className='hint';p.textContent='Aún nadie ha votado.';el.appendChild(p);return}
+  l.forEach(v=>{const d=document.createElement('div');d.className='note1 voter';const b=document.createElement('b');b.textContent=v.name;const w=document.createElement('span');w.className='when';w.textContent=' · '+fmt(v.at);d.append(b,w);el.appendChild(d)})}
 function results(){
   const pts={o1:0,o2:0,o3:0},firsts={o1:0,o2:0,o3:0};
   all.forEach(v=>{pts[v.first]+=3;pts[v.second]+=2;pts[v.third]+=1;firsts[v.first]++});
   const max=Math.max(1,...Object.values(pts)),top=Math.max(...Object.values(pts));
   $('#bars').innerHTML=[...OPTS].sort((a,b)=>pts[b.id]-pts[a.id]).map(o=>`<div class="bar${all.length&&pts[o.id]===top?' lead':''}" style="--k:var(--k${o.id.slice(1)})"><div class="top"><span>${o.name}</span><small>${pts[o.id]} pts · ${firsts[o.id]} primer${firsts[o.id]===1?'':'es'} lugar${firsts[o.id]===1?'':'es'}</small></div><div class="track"><div class="fill" style="width:${pts[o.id]/max*100}%"></div></div></div>`).join('');
-  $('#count').textContent=all.length?`${all.length} ${all.length===1?'persona ha votado':'personas han votado'}.`:'Aún no hay votos. Sé la primera persona en votar.';
+  $('#count').textContent=all.length?`${all.length} ${all.length===1?'persona ha votado':'personas han votado'}.`:'Aún no hay votos. Sé la primera persona en votar.';renderVoters();
 }
 cards.forEach(c=>c.querySelectorAll('.num').forEach(b=>b.addEventListener('click',()=>place(c.dataset.id,+b.dataset.n))));
 const SHOTS=[...document.querySelectorAll('.shot[data-v=back]'),...document.querySelectorAll('.shot[data-v=front]')];
