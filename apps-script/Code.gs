@@ -9,7 +9,7 @@ var LABELS = {
 
 function hoja_() {
   var s = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-  if (s.getLastRow() === 0) s.appendRow(['Fecha', 'Nombre', '1er lugar', '2do lugar', '3er lugar']);
+  if (s.getLastRow() === 0) s.appendRow(['Fecha y hora', 'Nombre', '1er lugar', '2do lugar', '3er lugar']);
   return s;
 }
 
@@ -25,7 +25,7 @@ function json_(o) {
 function notas_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getSheetByName('Notas');
-  if (!s) { s = ss.insertSheet('Notas'); s.appendRow(['Fecha', 'Nombre', 'Nota']); }
+  if (!s) { s = ss.insertSheet('Notas'); s.appendRow(['Fecha y hora', 'Nombre', 'Nota']); }
   return s;
 }
 
