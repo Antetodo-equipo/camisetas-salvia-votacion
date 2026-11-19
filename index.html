@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Camisetas Salvia Blanca</title>
+<meta name="description" content="Vota por la camiseta del equipo de Salvia Blanca 2026">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<style>[hidden]{display:none!important}img{max-width:100%}html{-webkit-text-size-adjust:100%}</style>
+<style>
+/* Layout: hero terracota con cinta de frase, tres tarjetas grandes con el color de cada diseño, barra de voto fija abajo, confeti al enviar */
+:root{--bg:#F6EFE4;--card:#fff;--fg:#3F2314;--muted:#6B5A50;--accent:#B9633C;--accent-fg:#fff;--line:#e3d6c6;--salvia:#9DB3AE;--gold:#F0B24F;--deep:#4A2616;
+--c1:#DCE4F7;--c2:#FBD9C3;--c3:#CFE8E1;--k1:#2438B8;--k2:#D5531F;--k3:#2F8F7E;
+--font:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1614;--card:#271f1b;--fg:#f3e6d8;--muted:#b9a99d;--accent:#d57c52;--accent-fg:#1b1614;--line:#43362f;--gold:#E3A75B;--deep:#f3e6d8;--c1:#26304f;--c2:#4a2e22;--c3:#1f3a36;--k1:#8da2ff;--k2:#ff9566;--k3:#5fd0bb;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1614;--card:#271f1b;--fg:#f3e6d8;--muted:#b9a99d;--accent:#d57c52;--accent-fg:#1b1614;--line:#43362f;--gold:#E3A75B;--deep:#f3e6d8;--c1:#26304f;--c2:#4a2e22;--c3:#1f3a36;--k1:#8da2ff;--k2:#ff9566;--k3:#5fd0bb;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--font);margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:#B9633C;color:#fff;position:relative;overflow:hidden}
+header::before,header::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+header::before{width:420px;height:420px;right:-120px;top:-160px;background:#D37A4F}
+header::after{width:260px;height:260px;right:120px;bottom:-170px;background:#9E4F2C}
+header .wrap{position:relative;z-index:1;padding-block:34px 40px}
+.brand{font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+h1{font-size:clamp(38px,9vw,88px);line-height:.95;margin:14px 0 14px;font-weight:700;letter-spacing:-.035em;text-wrap:balance}
+h1 span{color:#4a2616;display:block}
+header p{margin:0;max-width:52ch;font-size:clamp(16px,2.4vw,20px)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chips b{background:#fff;color:#4a2616;border-radius:99px;padding:6px 14px;font-size:14px}
+.ticker{background:#4a2616;color:#F7E8CF;overflow:hidden;white-space:nowrap;padding:10px 0;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.ticker div{display:inline-block;animation:slide 28s linear infinite}
+@keyframes slide{to{transform:translateX(-50%)}}
+h2{font-size:clamp(22px,4vw,30px);margin:0 0 4px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:12px}
+h2 i{font-style:normal;background:var(--accent);color:var(--accent-fg);width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.hint{color:var(--muted);margin:0 0 18px}
+main{padding-block:34px 140px}
+.name{display:flex;flex-direction:column;gap:6px;max-width:380px;margin-bottom:36px}
+label{font-size:14px;font-weight:600}
+input{font:inherit;font-size:18px;color:var(--fg);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+input:focus-visible,button:focus-visible,.opt:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media(max-width:860px){.opts{grid-template-columns:1fr}}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;border:3px solid transparent;border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;min-width:0;transition:transform .2s,box-shadow .2s,border-color .2s;box-shadow:0 6px 18px rgba(74,38,22,.12)}
+.opt[data-id=o1]{background:var(--c1);--k:var(--k1)}
+.opt[data-id=o2]{background:var(--c2);--k:var(--k2)}
+.opt[data-id=o3]{background:var(--c3);--k:var(--k3)}
+.opt:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 14px 30px rgba(74,38,22,.2)}
+.opt:active{transform:scale(.98)}
+.opt img{width:100%;height:auto;border-radius:16px;display:block;background:#F7E8CF}
+.tag{align-self:flex-start;background:var(--deep);color:var(--bg);font-size:13px;font-weight:600;padding:3px 14px;border-radius:99px}
+.opt h3{margin:0;font-size:26px;font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--k)}
+.opt p{margin:0;color:var(--fg);opacity:.75;font-size:15px}
+.rank{position:absolute;top:-14px;right:-8px;width:64px;height:64px;border-radius:50%;background:var(--k);color:#fff;font-weight:700;font-size:32px;display:none;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.3);border:4px solid var(--bg)}
+.opt[data-rank]{border-color:var(--k);transform:translateY(-4px)}
+.opt[data-rank] .rank{display:flex;animation:pop .35s cubic-bezier(.3,1.8,.5,1)}
+.opt[data-rank="1"]{box-shadow:0 0 0 6px color-mix(in srgb,var(--k) 25%,transparent),0 14px 30px rgba(74,38,22,.25)}
+@keyframes pop{from{transform:scale(0) rotate(-40deg)}to{transform:scale(1)}}
+.bar-fixed{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--deep);color:var(--bg);padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.bar-in{max-width:1120px;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.slots{display:flex;gap:8px;flex-wrap:wrap}
+.slot{border:2px dashed color-mix(in srgb,var(--bg) 45%,transparent);border-radius:99px;padding:5px 14px;font-size:14px;font-weight:600;min-width:116px;text-align:center}
+.slot.on{border:2px solid var(--gold);background:var(--gold);color:#3b2410}
+.btns{display:flex;gap:8px;align-items:center}
+button.main{font:inherit;font-weight:700;font-size:17px;background:var(--gold);color:#3b2410;border:0;border-radius:99px;padding:12px 26px;cursor:pointer;transition:transform .15s}
+button.main:not(:disabled):hover{transform:scale(1.05)}
+button.main:disabled{opacity:.4;cursor:not-allowed}
+button.ghost{font:inherit;background:none;color:inherit;border:2px solid color-mix(in srgb,var(--bg) 40%,transparent);border-radius:99px;padding:10px 16px;cursor:pointer}
+.status{min-height:24px;margin:18px 0 0;font-weight:700;font-size:18px}
+.status.ok{color:var(--accent)}
+section.res{margin-top:44px;padding:28px;border-radius:24px;background:var(--card);box-shadow:0 6px 18px rgba(74,38,22,.1)}
+.bars{display:flex;flex-direction:column;gap:18px;margin-top:18px}
+.bar .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-weight:700;font-size:18px}
+.bar .top small{font-weight:500;color:var(--muted);font-size:14px}
+.track{height:22px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.2,.9,.3,1);background:var(--k)}
+.bar.lead .top span::after{content:"Va ganando";margin-left:10px;background:var(--gold);color:#3b2410;font-size:12px;padding:2px 10px;border-radius:99px;vertical-align:middle}
+.votes{margin-top:20px;color:var(--muted);font-size:14px}
+.note{background:var(--card);border:2px dashed var(--line);border-radius:14px;padding:14px 16px;margin-bottom:24px}
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pod{position:relative;min-height:110px;border:3px dashed var(--line);border-radius:20px;display:flex;align-items:center;gap:12px;padding:12px 14px 12px 74px;font-weight:700;font-size:17px;line-height:1.15;color:var(--muted);transition:background .15s,border-color .15s,transform .15s;cursor:default}
+.pod::before{content:attr(data-n);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;background:var(--line);color:var(--fg);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.pod[data-slot="0"]::before{content:"1"}.pod[data-slot="1"]::before{content:"2"}.pod[data-slot="2"]::before{content:"3"}
+.pod.over{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 25%,transparent);transform:scale(1.03)}
+.pod.full{border:3px solid var(--k);background:var(--card);color:var(--k);cursor:pointer}
+.pod.full::before{background:var(--k);color:#fff}
+.pod img{width:64px;height:auto;border-radius:10px;position:absolute;right:10px;top:50%;transform:translateY(-50%);object-fit:cover;object-position:left;aspect-ratio:1;background:#F7E8CF}
+.pod.full{padding-right:86px}
+.pod small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+@media(max-width:600px){.pod{min-height:92px;font-size:14px;padding:10px 8px 10px 56px}.pod::before{width:38px;height:38px;font-size:19px;left:8px}.pod img{display:none}.pod.full{padding-right:8px}}
+.opt{touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.opt img{pointer-events:none;-webkit-user-drag:none}
+
+.ghostcard{position:fixed;z-index:60;width:150px;pointer-events:none;border-radius:16px;box-shadow:0 14px 30px rgba(0,0,0,.4);transform:translate(-50%,-60%) rotate(-4deg);border:3px solid var(--gold);overflow:hidden;background:#F7E8CF}
+.ghostcard img{width:100%;display:block}
+.prog{font-weight:700;font-size:16px}
+
+.opts{grid-template-columns:1fr!important;gap:30px!important;max-width:1000px;margin-inline:auto}
+.opt img{background:#fff}
+.opt h3{font-size:clamp(26px,5vw,38px)}
+.opt p{font-size:17px}
+.zoom{position:absolute;left:26px;top:26px;background:var(--deep);color:var(--bg);font-size:14px;font-weight:600;padding:7px 14px;border-radius:99px;cursor:zoom-in;z-index:2;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+.zoom:hover{background:var(--accent);color:var(--accent-fg)}
+main{padding-bottom:230px!important}
+.bar-in{flex-direction:column;align-items:stretch;gap:8px}
+.bar-in .podium{gap:8px}
+.bar-fixed .pod{min-height:56px;padding:6px 10px 6px 54px;font-size:14px;border-width:2px;border-color:color-mix(in srgb,var(--bg) 45%,transparent);color:var(--bg);background:transparent;border-radius:14px}
+.bar-fixed .pod::before{width:36px;height:36px;font-size:18px;left:9px;background:color-mix(in srgb,var(--bg) 30%,transparent);color:var(--bg)}
+.bar-fixed .pod.over{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 30%,transparent)}
+.bar-fixed .pod.full{background:var(--card);color:var(--k);border-color:var(--k);padding-right:10px}
+.bar-fixed .pod.full::before{background:var(--k);color:#fff}
+.bar-fixed .pod img{display:none}
+.bar-fixed .pod small{display:none}
+.bar-fixed .btns{justify-content:space-between}
+.bar-fixed .prog{display:none}
+@media(max-width:600px){.bar-fixed .pod{font-size:12px;padding:6px 6px 6px 44px;min-height:50px}.bar-fixed .pod::before{width:30px;height:30px;font-size:15px;left:6px}}
+.lb{position:fixed;inset:0;z-index:80;background:rgba(20,10,5,.92);display:flex;align-items:center;justify-content:center;padding:56px 12px 48px}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:100%;border-radius:12px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lbx{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));font:inherit;font-size:22px;background:#fff;color:#3F2314;border:0;border-radius:50%;width:44px;height:44px;cursor:pointer}
+.lbn{position:absolute;top:50%;transform:translateY(-50%);font:inherit;font-size:34px;line-height:1;background:rgba(255,255,255,.9);color:#3F2314;border:0;border-radius:50%;width:48px;height:48px;cursor:pointer}
+.lbp{left:max(8px,env(safe-area-inset-left,0px))}.lbq{right:max(8px,env(safe-area-inset-right,0px))}
+.lbt{position:absolute;bottom:max(12px,env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#fff;font-weight:700;font-size:18px}
+.gate{position:fixed;inset:0;z-index:90;background:#B9633C;display:flex;align-items:center;justify-content:center;padding:20px}
+.gate[hidden]{display:none}
+.gbox{background:var(--bg);color:var(--fg);border-radius:28px;padding:30px;max-width:460px;width:100%;display:flex;flex-direction:column;gap:6px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.gbox label{margin-top:4px}
+.go{margin-top:16px;background:var(--accent)!important;color:var(--accent-fg)!important}
+.go:disabled{opacity:.4}
+.who{color:var(--muted);font-size:14px;margin:0 0 12px}
+.opt{cursor:default!important}
+.opt:hover{transform:none!important}
+.nums{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px}
+.nq{font-weight:700;font-size:17px;flex:1 1 100%}
+.num{font:inherit;font-size:28px;font-weight:700;width:68px;height:68px;border-radius:50%;border:3px solid var(--k);background:var(--card);color:var(--k);cursor:pointer;transition:transform .15s,background .15s}
+.num:hover{transform:scale(1.08)}
+.num.on{background:var(--k);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--k) 25%,transparent)}
+@media(max-width:600px){.num{width:30%;max-width:92px;height:62px;border-radius:18px}}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+
+<header><div class="wrap">
+  <div class="brand">Salvia Blanca · Cocina campestre</div>
+  <h1>¿Cuál camiseta<span>nos ponemos?</span></h1>
+  <p>Tres diseños, un solo equipo. Ponle un número del 1 al 3 a cada camiseta. Toma menos de un minuto.</p>
+  <div class="chips"><b>3 diseños</b><b>1 minuto</b><b>Sin registro de nombre</b></div>
+</div></header>
+<div class="ticker" aria-hidden="true"><div>Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ </div></div>
+
+<main class="wrap">
+  <div class="note" id="offline" hidden>No se pudo conectar con la votación. Revisa tu internet e intenta de nuevo en un momento.</div>
+
+  <h2><i>1</i>Elige tus favoritas</h2>
+  <p class="hint">Debajo de cada camiseta toca el número del lugar donde la quieres: 1 es la que más te gusta. Con «Ver grande» la ves en pantalla completa.</p>
+<div class="opts" id="opts" style="margin-top:8px">
+    <div class="opt" data-id="o1" aria-label="Opción 1, Pulpo en plumilla"><span class="rank"></span><span class="zoom" role="button" tabindex="0" aria-label="Ver grande">🔍 Ver grande</span><img alt="Camiseta con pulpo en plumilla, frente y espalda" src="img/o1.jpg"><span class="tag">Opción 1</span><h3>Pulpo en plumilla</h3><p>Rojo y azul · ilustración detallada</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
+    <div class="opt" data-id="o2" aria-label="Opción 2, Estampilla de langosta"><span class="rank"></span><span class="zoom" role="button" tabindex="0" aria-label="Ver grande">🔍 Ver grande</span><img alt="Camiseta con estampilla de langosta, frente y espalda" src="img/o2.jpg"><span class="tag brand-tag">Opción 2 · colores de marca</span><h3>Estampilla de langosta</h3><p>Terracota y verde salvia</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
+    <div class="opt" data-id="o3" aria-label="Opción 3, Sellos verde azulado"><span class="rank"></span><span class="zoom" role="button" tabindex="0" aria-label="Ver grande">🔍 Ver grande</span><img alt="Camiseta con sellos verde azulado, frente y espalda" src="img/o3.jpg"><span class="tag">Opción 3</span><h3>Sellos verde azulado</h3><p>Una tinta de marca · gráfico y moderno</p><div class="nums" role="group" aria-label="Lugar"><span class="nq">¿En qué lugar la pones?</span><button class="num" type="button" data-n="0">1</button><button class="num" type="button" data-n="1">2</button><button class="num" type="button" data-n="2">3</button></div></div>
+  </div>
+
+  <p class="status" id="status" role="status"></p>
+
+  <section class="res">
+    <h2>Resultados</h2>
+    <p class="hint">1.er lugar vale 3 puntos, 2.º vale 2 y 3.º vale 1.</p>
+    <div class="bars" id="bars"></div>
+    <p class="votes" id="count"></p>
+  </section>
+</main>
+<canvas id="fx"></canvas>
+<div class="gate" id="gate"><form class="gbox" id="gform">
+  <div class="brand">Salvia Blanca · Cocina campestre</div>
+  <h2 style="margin:10px 0 6px;font-size:clamp(28px,7vw,42px);line-height:1;letter-spacing:-.03em">Antes de empezar</h2>
+  <p class="hint" style="margin:0 0 16px">Escribe tu nombre para votar por la camiseta del equipo.</p>
+  <label for="nm">Tu nombre</label>
+  <input id="nm" autocomplete="given-name" maxlength="40" placeholder="Ej. Mariana" required>
+  <button class="main go" type="submit" id="gbtn" disabled>Empezar a votar</button>
+</form></div>
+<div class="lb" id="lb" hidden><button class="lbx" id="lbx" type="button" aria-label="Cerrar">✕</button><button class="lbn lbp" id="lbp" type="button" aria-label="Anterior">‹</button><img id="lbi" alt=""><button class="lbn lbq" id="lbq" type="button" aria-label="Siguiente">›</button><div class="lbt" id="lbt"></div></div>
+<div class="bar-fixed"><div class="bar-in">
+  <div class="podium" id="podium"><div class="pod" data-slot="0"></div><div class="pod" data-slot="1"></div><div class="pod" data-slot="2"></div></div>
+  <div class="prog" id="prog">Elige tu 1.er lugar</div>
+  <div class="btns"><button class="ghost" id="reset" type="button">Borrar</button><button class="main" id="send" type="button" disabled>Enviar mi voto</button></div>
+</div></div>
+
+<script>
+const ENDPOINT='';
+const OPTS=[{id:'o1',name:'Pulpo en plumilla',img:null},{id:'o2',name:'Estampilla de langosta'},{id:'o3',name:'Sellos verde azulado'}];
+const NAME=Object.fromEntries(OPTS.map(o=>[o.id,o.name]));
+const LAB=['1.er lugar','2.º lugar','3.er lugar'];
+let slots=[null,null,null],all=[],loaded=false,myName='';
+const $=s=>document.querySelector(s);
+const cards=[...document.querySelectorAll('.opt')];
+const pods=[...document.querySelectorAll('.pod')];
+const srcOf=id=>document.querySelector('.opt[data-id='+id+'] img').src;
+function paint(){
+  cards.forEach(c=>{const i=slots.indexOf(c.dataset.id);
+    if(i>=0){c.dataset.rank=i+1;c.querySelector('.rank').textContent=i+1}else{delete c.dataset.rank}});
+  cards.forEach(c=>c.querySelectorAll('.num').forEach(b=>b.classList.toggle('on',slots[+b.dataset.n]===c.dataset.id)));
+  pods.forEach((p,i)=>{const id=slots[i];
+    if(id){p.classList.add('full');p.dataset.id=id;p.style.setProperty('--k','var(--k'+id.slice(1)+')');
+      p.innerHTML=`<span>${NAME[id]}<small>${LAB[i]}</small></span>`;p.title='Toca para quitar'}
+    else{p.classList.remove('full');delete p.dataset.id;p.style.removeProperty('--k');p.innerHTML=`<span>${LAB[i]}</span>`;p.title=''}});
+  const n=slots.filter(Boolean).length;
+  $('#prog').textContent=n===3?'Podio completo. Ya puedes enviar.':'Elige tu '+LAB[slots.indexOf(null)];
+  validate();
+}
+function validate(){$('#send').disabled=!(slots.every(Boolean)&&myName&&ENDPOINT)}
+function autofill(){
+  if(slots.filter(Boolean).length===2){const rest=OPTS.find(o=>!slots.includes(o.id));slots[slots.indexOf(null)]=rest.id}
+}
+function place(id,to){ // to: índice o undefined = primer hueco
+  const from=slots.indexOf(id);
+  if(to===undefined){if(from>=0){slots[from]=null}else{to=slots.indexOf(null);if(to<0)return;slots[to]=id;autofill()}paint();return}
+  if(from===to){slots[to]=null;paint();return}
+  const occ=slots[to];
+  if(from>=0)slots[from]=occ||null;
+  slots[to]=id;
+  autofill();paint();
+}
+pods.forEach(p=>p.addEventListener('click',()=>{if(p.dataset.id){slots[+p.dataset.slot]=null;paint()}}));
+$('#reset').onclick=()=>{slots=[null,null,null];$('#status').textContent='';paint()};
+$('#send').onclick=async()=>{
+  const b=$('#send');b.disabled=true;
+  try{
+    const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name:myName,first:slots[0],second:slots[1],third:slots[2]})});
+    const j=await r.json();if(!j.ok)throw new Error('x');
+    try{localStorage.setItem('sb-vote',JSON.stringify(slots))}catch(e){}
+    load();
+    const s=$('#status');s.className='status ok';s.textContent='¡Listo! Tu voto quedó guardado. Gracias.';confetti();
+  }catch(e){const s=$('#status');s.className='status';s.textContent='No se pudo guardar el voto. Intenta de nuevo.';validate()}
+};
+function confetti(){
+  const c=$('#fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const cols=['#B9633C','#2438B8','#D5531F','#2F8F7E','#F0B24F','#E8C9A8'];
+  const p=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight*.7,vx:(Math.random()-.5)*16,vy:-Math.random()*18-6,s:6+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
+  let f=0;(function tick(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.vy+=.45;q.x+=q.vx;q.y+=q.vy;q.r+=q.vr;x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/2,q.s,q.s*.6);x.restore()});if(++f<140)requestAnimationFrame(tick);else x.clearRect(0,0,c.width,c.height)})();
+}
+function results(){
+  const pts={o1:0,o2:0,o3:0},firsts={o1:0,o2:0,o3:0};
+  all.forEach(v=>{pts[v.first]+=3;pts[v.second]+=2;pts[v.third]+=1;firsts[v.first]++});
+  const max=Math.max(1,...Object.values(pts)),top=Math.max(...Object.values(pts));
+  $('#bars').innerHTML=[...OPTS].sort((a,b)=>pts[b.id]-pts[a.id]).map(o=>`<div class="bar${all.length&&pts[o.id]===top?' lead':''}" style="--k:var(--k${o.id.slice(1)})"><div class="top"><span>${o.name}</span><small>${pts[o.id]} pts · ${firsts[o.id]} primer${firsts[o.id]===1?'':'es'} lugar${firsts[o.id]===1?'':'es'}</small></div><div class="track"><div class="fill" style="width:${pts[o.id]/max*100}%"></div></div></div>`).join('');
+  $('#count').textContent=all.length?`${all.length} ${all.length===1?'persona ha votado':'personas han votado'}.`:'Aún no hay votos. Sé la primera persona en votar.';
+}
+cards.forEach(c=>c.querySelectorAll('.num').forEach(b=>b.addEventListener('click',()=>place(c.dataset.id,+b.dataset.n))));
+let lbI=0;
+function lb(i){lbI=(i+3)%3;const c=cards[lbI];$('#lbi').src=c.querySelector('img').src;$('#lbt').textContent=c.querySelector('h3').textContent+' · '+(lbI+1)+' de 3';$('#lb').hidden=false}
+cards.forEach((c,i)=>{const z=c.querySelector('.zoom');const go=e=>{e.stopPropagation();e.preventDefault();lb(i)};z.addEventListener('click',go);z.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go(e)})});
+$('#lbx').onclick=()=>$('#lb').hidden=true;$('#lbp').onclick=e=>{e.stopPropagation();lb(lbI-1)};$('#lbq').onclick=e=>{e.stopPropagation();lb(lbI+1)};
+$('#lb').addEventListener('click',e=>{if(e.target.id==='lb'||e.target.id==='lbi')$('#lb').hidden=true});
+addEventListener('keydown',e=>{if($('#lb').hidden)return;if(e.key==='Escape')$('#lb').hidden=true;if(e.key==='ArrowLeft')lb(lbI-1);if(e.key==='ArrowRight')lb(lbI+1)});
+try{const n=localStorage.getItem('sb-name');if(n)$('#nm').value=n}catch(e){}
+$('#nm').addEventListener('input',()=>{$('#gbtn').disabled=!$('#nm').value.trim()});
+$('#gbtn').disabled=!$('#nm').value.trim();
+$('#gform').addEventListener('submit',e=>{e.preventDefault();const n=$('#nm').value.trim();if(!n)return;myName=n;
+  try{localStorage.setItem('sb-name',n)}catch(x){}
+  $('#gate').hidden=true;$('#status').textContent='Votando como '+n+'.';$('#status').className='status';validate();scrollTo(0,0)});
+results();paint();
+async function load(){
+  try{
+    const r=await fetch(ENDPOINT+'?t='+Date.now());const j=await r.json();
+    all=(j.votes||[]).filter(v=>v&&v.first);results();$('#offline').hidden=true;
+  }catch(e){if(!all.length)$('#offline').hidden=false}
+}
+try{const sv=JSON.parse(localStorage.getItem('sb-vote')||'null');if(Array.isArray(sv)&&sv.length===3&&sv.every(x=>NAME[x])){slots=sv;paint();
+  $('#status').className='status ok';$('#status').textContent='Ya votaste desde este dispositivo. Puedes cambiar tu podio y volver a enviar.'}}catch(e){}
+if(ENDPOINT){load();setInterval(load,20000)}else{$('#offline').textContent='La votación todavía no está conectada.';$('#offline').hidden=false}
+</script>
+
+</body></html>

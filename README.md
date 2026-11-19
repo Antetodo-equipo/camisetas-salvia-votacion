@@ -1,2 +1,3 @@
-# camisetas-salvia-votacion
-Votación del equipo de Salvia Blanca para las camisetas 2026
+# Camisetas Salvia Blanca 2026
+
+Página de votación del equipo. Los votos se guardan en una hoja de Google (ver `apps-script/Code.gs`).
