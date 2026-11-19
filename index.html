@@ -150,6 +150,8 @@ main{padding-bottom:230px!important}
 .ready .main{background:#3F2314;color:#fff;padding:10px 22px}
 .ready.done{background:#2F8F7E;color:#fff}
 .notes{margin-top:34px;padding-top:24px;border-top:2px solid var(--line)}
+.cancelbtn{font:inherit;font-weight:600;color:var(--fg);background:none;border:2px solid var(--line);border-radius:99px;padding:8px 18px;cursor:pointer;margin-top:8px}
+.cancelbtn.sure{background:#B3261E;border-color:#B3261E;color:#fff}
 .when{font-weight:400;color:var(--muted);font-size:13px}
 .voter{display:inline-block;margin:8px 8px 0 0;padding:6px 14px}
 .note1{background:var(--bg);border-radius:14px;padding:10px 14px;margin-top:10px}
@@ -183,6 +185,7 @@ textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   </div>
 
   <p class="status" id="status" role="status"></p>
+  <button class="ghost cancelbtn" id="cancelvote" type="button" hidden>Cancelar mi voto</button>
 
   <section class="res">
     <h2>Resultados</h2>
@@ -238,7 +241,7 @@ function paint(){
   validate();
 }
 let backendReady=false,sentKey='',notes=[];
-function validate(){const ok=slots.every(Boolean)&&myName&&backendReady;$('#send').disabled=$('#send2').disabled=!ok;
+function validate(){const ok=slots.every(Boolean)&&myName&&backendReady;$('#cancelvote').hidden=!sentKey;$('#send').disabled=$('#send2').disabled=!ok;
   const r=$('#ready');if(!r.classList.contains('done'))r.hidden=!(ok&&sentKey!==slots.join())}
 function autofill(){
   if(slots.filter(Boolean).length===2){const rest=OPTS.find(o=>!slots.includes(o.id));slots[slots.indexOf(null)]=rest.id}
@@ -254,6 +257,14 @@ function place(id,to){ // to: índice o undefined = primer hueco
 }
 pods.forEach(p=>p.addEventListener('click',()=>{if(p.dataset.id){slots[+p.dataset.slot]=null;paint()}}));
 $('#reset').onclick=()=>{slots=[null,null,null];$('#status').textContent='';paint()};
+let cTimer=0;
+$('#cancelvote').onclick=async()=>{
+  const b=$('#cancelvote');
+  if(!b.classList.contains('sure')){b.classList.add('sure');b.textContent='¿Seguro? Toca otra vez para cancelar';clearTimeout(cTimer);cTimer=setTimeout(()=>{b.classList.remove('sure');b.textContent='Cancelar mi voto'},4000);return}
+  clearTimeout(cTimer);b.classList.remove('sure');b.textContent='Cancelar mi voto';b.disabled=true;
+  try{await saveCancel();slots=[null,null,null];sentKey='';const s=$('#status');s.className='status ok';s.textContent='Tu voto fue cancelado. Puedes votar de nuevo.';paint()}
+  catch(e){const s=$('#status');s.className='status';s.textContent='No se pudo cancelar el voto. Intenta de nuevo.'}
+  b.disabled=false};
 async function sendVote(){
   const k=slots.join();$('#send').disabled=$('#send2').disabled=true;
   try{
@@ -315,6 +326,7 @@ results();renderNotes();paint();
 const ENDPOINT='';
 async function post(o){const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)});const j=await r.json();if(!j.ok)throw new Error('x')}
 async function saveVote(p){await post(p);try{localStorage.setItem('sb-vote',JSON.stringify(slots))}catch(e){}load()}
+async function saveCancel(){await post({type:'cancel',name:myName});try{localStorage.removeItem('sb-vote')}catch(e){}load()}
 async function saveNote(p){await post({...p,type:'note'});load()}
 async function load(){
   try{
