@@ -323,7 +323,7 @@ $('#gform').addEventListener('submit',e=>{e.preventDefault();const n=$('#nm').va
   $('#gate').hidden=true;$('#status').textContent='Votando como '+n+'.';$('#status').className='status';validate();scrollTo(0,0)});
 results();renderNotes();paint();
 /*BACKEND*/
-const ENDPOINT='';
+const ENDPOINT='https://script.google.com/macros/s/AKfycbxwaBXK-5QrCjMnZJCCeFFcee9itQTlQXeRX2MbHZBdvkyYIDAack0KQ9M0AJ2xfKHj/exec';
 async function post(o){const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)});const j=await r.json();if(!j.ok)throw new Error('x')}
 async function saveVote(p){await post(p);try{localStorage.setItem('sb-vote',JSON.stringify(slots))}catch(e){}load()}
 async function saveCancel(){await post({type:'cancel',name:myName});try{localStorage.removeItem('sb-vote')}catch(e){}load()}
