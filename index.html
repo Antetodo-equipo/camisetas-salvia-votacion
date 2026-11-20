@@ -161,6 +161,11 @@ textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .notebtn{padding:10px 22px!important;font-size:16px!important;background:var(--accent)!important;color:var(--accent-fg)!important}
 .notebtn:disabled{opacity:.4}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.viewbtn{font:inherit;font-weight:700;font-size:16px;cursor:pointer;border:0;border-radius:99px;padding:11px 22px;background:#fff;color:#4a2616;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.viewbtn:hover{background:#F7E8CF}.viewbtn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.viewbtn[hidden]{display:none}
+.viewbtn.alt{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.7);box-shadow:none}.viewbtn.alt:hover{background:rgba(255,255,255,.15)}
+.seeonly{margin-top:10px;font:inherit;font-weight:600;font-size:16px;cursor:pointer;background:transparent;color:var(--fg);border:2px solid var(--line);border-radius:99px;padding:11px 18px;width:100%}
+.seeonly:hover{border-color:var(--accent)}.seeonly:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head><body>
@@ -170,6 +175,7 @@ textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   <h1>¿Cuál camiseta<span>nos ponemos?</span></h1>
   <p>Tres diseños, un solo equipo. Ponle un número del 1 al 3 a cada camiseta. Toma menos de un minuto.</p>
   <div class="chips"><b>3 diseños</b><b>1 minuto</b><b>Sin registro de nombre</b></div>
+  <div class="chips" style="margin-top:16px"><button class="viewbtn" id="seeres" type="button">Ver votación ↓</button><button class="viewbtn alt" id="wantvote" type="button" hidden>Escribir mi nombre para votar</button></div>
 </div></header>
 <div class="ticker" aria-hidden="true"><div>Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ Creamos experiencias mágicas y memorables ✦ </div></div>
 
@@ -187,7 +193,7 @@ textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   <p class="status" id="status" role="status"></p>
   <button class="ghost cancelbtn" id="cancelvote" type="button" hidden>Cancelar mi voto</button>
 
-  <section class="res">
+  <section class="res" id="resultados">
     <h2>Resultados</h2>
     <p class="hint">1.er lugar vale 3 puntos, 2.º vale 2 y 3.º vale 1.</p>
     <div class="bars" id="bars"></div>
@@ -211,6 +217,7 @@ textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   <label for="nm">Tu nombre</label>
   <input id="nm" autocomplete="given-name" maxlength="40" placeholder="Ej. Mariana" required>
   <button class="main go" type="submit" id="gbtn" disabled>Empezar a votar</button>
+  <button class="seeonly" id="seeonly" type="button">Ver votación</button>
 </form></div>
 <div class="lb" id="lb" hidden><button class="lbx" id="lbx" type="button" aria-label="Cerrar">✕</button><button class="lbn lbp" id="lbp" type="button" aria-label="Anterior">‹</button><div class="lbs" id="lbs"><img id="lbi" alt=""></div><button class="lbn lbq" id="lbq" type="button" aria-label="Siguiente">›</button><div class="lbt" id="lbt"></div></div>
 <div class="bar-fixed"><div class="bar-in">
@@ -318,10 +325,14 @@ addEventListener('keydown',e=>{if($('#lb').hidden)return;if(e.key==='Escape')$('
 try{const n=localStorage.getItem('sb-name');if(n)$('#nm').value=n}catch(e){}
 $('#nm').addEventListener('input',()=>{$('#gbtn').disabled=!$('#nm').value.trim()});
 $('#gbtn').disabled=!$('#nm').value.trim();
-$('#gform').addEventListener('submit',e=>{e.preventDefault();const n=$('#nm').value.trim();if(!n)return;myName=n;
+$('#gform').addEventListener('submit',e=>{e.preventDefault();const n=$('#nm').value.trim();if(!n)return;myName=n;$('#wantvote').hidden=true;
   try{localStorage.setItem('sb-name',n)}catch(x){}
   $('#gate').hidden=true;$('#status').textContent='Votando como '+n+'.';$('#status').className='status';validate();scrollTo(0,0)});
 results();renderNotes();paint();
+const verRes=()=>{const r=document.getElementById('resultados');if(r)r.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'})};
+$('#seeres').addEventListener('click',verRes);
+$('#seeonly').addEventListener('click',()=>{$('#gate').hidden=true;if(!myName)$('#wantvote').hidden=false;setTimeout(verRes,60)});
+$('#wantvote').addEventListener('click',()=>{$('#gate').hidden=false;$('#nm').focus()});
 /*BACKEND*/
 const ENDPOINT='https://script.google.com/macros/s/AKfycbxwaBXK-5QrCjMnZJCCeFFcee9itQTlQXeRX2MbHZBdvkyYIDAack0KQ9M0AJ2xfKHj/exec';
 const GRUPOS={antetodo:'Antetodo',contemplacion:'Grupo Contemplación'};let GRUPO=(new URLSearchParams(location.search).get('grupo')||'').toLowerCase().trim();if(!GRUPOS[GRUPO])GRUPO='general';if(GRUPOS[GRUPO])document.querySelectorAll('.brand').forEach(e=>{e.textContent+=' · '+GRUPOS[GRUPO]});
