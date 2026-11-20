@@ -324,17 +324,18 @@ $('#gform').addEventListener('submit',e=>{e.preventDefault();const n=$('#nm').va
 results();renderNotes();paint();
 /*BACKEND*/
 const ENDPOINT='https://script.google.com/macros/s/AKfycbxwaBXK-5QrCjMnZJCCeFFcee9itQTlQXeRX2MbHZBdvkyYIDAack0KQ9M0AJ2xfKHj/exec';
-async function post(o){const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)});const j=await r.json();if(!j.ok)throw new Error('x')}
-async function saveVote(p){await post(p);try{localStorage.setItem('sb-vote',JSON.stringify(slots))}catch(e){}load()}
-async function saveCancel(){await post({type:'cancel',name:myName});try{localStorage.removeItem('sb-vote')}catch(e){}load()}
+const GRUPOS={antetodo:'Antetodo',contemplacion:'Grupo Contemplación'};let GRUPO=(new URLSearchParams(location.search).get('grupo')||'').toLowerCase().trim();if(!GRUPOS[GRUPO])GRUPO='general';if(GRUPOS[GRUPO])document.querySelectorAll('.brand').forEach(e=>{e.textContent+=' · '+GRUPOS[GRUPO]});
+async function post(o){const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...o,grupo:GRUPO})});const j=await r.json();if(!j.ok)throw new Error('x')}
+async function saveVote(p){await post(p);try{localStorage.setItem('sb-vote-'+GRUPO,JSON.stringify(slots))}catch(e){}load()}
+async function saveCancel(){await post({type:'cancel',name:myName});try{localStorage.removeItem('sb-vote-'+GRUPO)}catch(e){}load()}
 async function saveNote(p){await post({...p,type:'note'});load()}
 async function load(){
   try{
-    const r=await fetch(ENDPOINT+'?t='+Date.now());const j=await r.json();
+    const r=await fetch(ENDPOINT+'?grupo='+GRUPO+'&t='+Date.now());const j=await r.json();
     all=(j.votes||[]).filter(v=>v&&v.first);notes=j.notes||[];results();renderNotes();$('#offline').hidden=true;
   }catch(e){if(!all.length)$('#offline').hidden=false}
 }
-try{const sv=JSON.parse(localStorage.getItem('sb-vote')||'null');if(Array.isArray(sv)&&sv.length===3&&sv.every(x=>NAME[x])){slots=sv;sentKey=slots.join();paint();
+try{const sv=JSON.parse(localStorage.getItem('sb-vote-'+GRUPO)||'null');if(Array.isArray(sv)&&sv.length===3&&sv.every(x=>NAME[x])){slots=sv;sentKey=slots.join();paint();
   $('#status').className='status ok';$('#status').textContent='Ya votaste desde este dispositivo. Puedes cambiar tu podio y volver a enviar.'}}catch(e){}
 if(ENDPOINT){backendReady=true;validate();load();setInterval(load,20000)}else{$('#offline').textContent='La votación todavía no está conectada.';$('#offline').hidden=false}
 /*END*/
