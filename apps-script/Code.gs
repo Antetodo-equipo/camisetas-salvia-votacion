@@ -1,8 +1,10 @@
 // Votación camisetas Salvia Blanca 2026
 // Pegar en la hoja de Google: Extensiones > Apps Script. Implementar > Nueva implementación > Aplicación web
 // Ejecutar como: Yo. Quién tiene acceso: Cualquier persona.
-// Pestaña 1 "Votos": Fecha y hora, Nombre, 1er, 2do y 3er lugar, Estado (Activo o Cancelado).
-// Pestaña "Notas": Fecha y hora, Nombre, Nota.
+// Pestaña 1 "Votos": Fecha y hora, Nombre, 1er, 2do y 3er lugar, Estado (Activo o Cancelado), Grupo.
+// Pestaña "Notas": Fecha y hora, Nombre, Nota, Grupo.
+// Grupo: antetodo, contemplacion o general (liga sin ?grupo=). Cada grupo ve y cuenta solo lo suyo.
+var GRUPOS = ['antetodo', 'contemplacion'];
 var LABELS = {
   o1: 'Opción 1 · Pulpo en plumilla',
   o2: 'Opción 2 · Estampilla de langosta',
@@ -12,15 +14,37 @@ var FMT = 'dd/MM/yyyy HH:mm:ss';
 
 function hoja_() {
   var s = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-  if (s.getLastRow() === 0) s.appendRow(['Fecha y hora', 'Nombre', '1er lugar', '2do lugar', '3er lugar', 'Estado']);
+  if (s.getLastRow() === 0) s.appendRow(['Fecha y hora', 'Nombre', '1er lugar', '2do lugar', '3er lugar', 'Estado', 'Grupo']);
+  else colGrupo_(s, 7);
   return s;
 }
 
 function notas_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getSheetByName('Notas');
-  if (!s) { s = ss.insertSheet('Notas'); s.appendRow(['Fecha y hora', 'Nombre', 'Nota']); }
+  if (!s) { s = ss.insertSheet('Notas'); s.appendRow(['Fecha y hora', 'Nombre', 'Nota', 'Grupo']); }
+  else colGrupo_(s, 4);
   return s;
+}
+
+// Agrega el encabezado "Grupo" a una hoja que ya existía sin esa columna
+function colGrupo_(s, col) {
+  var h = s.getRange(1, col);
+  if (!h.getValue()) {
+    h.setValue('Grupo');
+    s.getRange(1, col - 1).copyTo(h, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  }
+}
+
+// Solo grupos conocidos; lo demás cuenta como "general"
+function grupo_(g) {
+  g = String(g || '').toLowerCase().trim();
+  return GRUPOS.indexOf(g) >= 0 ? g : 'general';
+}
+
+// Filas sin grupo (anteriores a esta versión) cuentan como "general"
+function esGrupo_(celda, g) {
+  return grupo_(celda) === g;
 }
 
 function idDe_(label) {
@@ -37,23 +61,24 @@ function json_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
 
-// Marca como Cancelado todo voto activo de ese nombre
-function cancelar_(s, key) {
+// Marca como Cancelado todo voto activo de ese nombre en ese grupo
+function cancelar_(s, key, g) {
   var rows = s.getDataRange().getValues();
   for (var i = 1; i < rows.length; i++) {
-    if (clave_(rows[i][1]) === key && String(rows[i][5]) !== 'Cancelado') {
+    if (clave_(rows[i][1]) === key && esGrupo_(rows[i][6], g) && String(rows[i][5]) !== 'Cancelado') {
       s.getRange(i + 1, 6).setValue('Cancelado');
     }
   }
 }
 
-// Devuelve votos activos (nombre, hora y lugares) y notas (nombre, hora y texto)
-function doGet() {
+// Devuelve votos activos (nombre, hora y lugares) y notas (nombre, hora y texto) del grupo pedido (?grupo=)
+function doGet(e) {
+  var g = grupo_(e && e.parameter && e.parameter.grupo);
   var rows = hoja_().getDataRange().getValues().slice(1);
-  var votes = rows.filter(function (r) { return String(r[5]) !== 'Cancelado'; }).map(function (r) {
+  var votes = rows.filter(function (r) { return String(r[5]) !== 'Cancelado' && esGrupo_(r[6], g); }).map(function (r) {
     return { name: String(r[1]), at: new Date(r[0]).getTime(), first: idDe_(r[2]), second: idDe_(r[3]), third: idDe_(r[4]) };
   }).filter(function (v) { return v.first && v.second && v.third; });
-  var nrows = notas_().getDataRange().getValues().slice(1).slice(-100);
+  var nrows = notas_().getDataRange().getValues().slice(1).filter(function (r) { return esGrupo_(r[3], g); }).slice(-100);
   var notes = nrows.map(function (r) {
     return { name: String(r[1]), text: String(r[2]), at: new Date(r[0]).getTime() };
   });
@@ -67,19 +92,20 @@ function doPost(e) {
     var d = JSON.parse(e.postData.contents);
     var name = String(d.name || '').trim().slice(0, 40);
     if (!name) return json_({ ok: false });
+    var g = grupo_(d.grupo);
 
     if (d.type === 'note') {
       var texto = String(d.text || '').trim().slice(0, 300);
       if (!texto) return json_({ ok: false });
       var n = notas_();
-      n.appendRow([new Date(), name, "'" + texto]);
+      n.appendRow([new Date(), name, "'" + texto, g]);
       n.getRange(n.getLastRow(), 1).setNumberFormat(FMT);
       return json_({ ok: true });
     }
 
     var s = hoja_();
     if (d.type === 'cancel') {
-      cancelar_(s, clave_(name));
+      cancelar_(s, clave_(name), g);
       return json_({ ok: true });
     }
 
@@ -87,8 +113,8 @@ function doPost(e) {
     var valido = p.every(function (x) { return LABELS[x]; }) && p[0] !== p[1] && p[0] !== p[2] && p[1] !== p[2];
     if (!valido) return json_({ ok: false });
     // El voto anterior de esta persona queda como Cancelado y solo cuenta el nuevo
-    cancelar_(s, clave_(name));
-    s.appendRow([new Date(), name, LABELS[p[0]], LABELS[p[1]], LABELS[p[2]], 'Activo']);
+    cancelar_(s, clave_(name), g);
+    s.appendRow([new Date(), name, LABELS[p[0]], LABELS[p[1]], LABELS[p[2]], 'Activo', g]);
     s.getRange(s.getLastRow(), 1).setNumberFormat(FMT);
     return json_({ ok: true });
   } catch (err) {
