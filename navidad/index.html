@@ -49,13 +49,11 @@ h2{font:400 clamp(44px,8vw,72px)/1 var(--script);color:var(--gold);margin:0 0 6p
 .info small{display:block;font:600 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
 .info b{font:600 20px/1.2 var(--serif)}
 /* Galería */
-.gal{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
-.gal figure{margin:0;border-radius:22px;overflow:hidden;border:2px solid var(--gold-d);background:var(--red-dd);aspect-ratio:4/3;grid-column:span 2;position:relative}
-.gal figure:nth-child(1),.gal figure:nth-child(2){grid-column:span 3}
-.gal img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
-.gal figure:hover img{transform:scale(1.05)}
-.gal figure.empty::after{content:"Foto";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:300 13px var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.6}
-@media(max-width:700px){.gal{grid-template-columns:1fr 1fr}.gal figure,.gal figure:nth-child(1),.gal figure:nth-child(2){grid-column:span 1}.gal figure:nth-child(1){grid-column:span 2}}
+.gal{columns:3 260px;column-gap:16px}
+.gal figure{margin:0 0 16px;break-inside:avoid;border-radius:22px;overflow:hidden;border:2px solid var(--gold-d);background:var(--red-dd);position:relative}
+.gal img{width:100%;height:auto;display:block;transition:transform .5s}
+.gal figure:hover img{transform:scale(1.04)}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 12px;background:linear-gradient(transparent,rgba(40,8,10,.85));font:400 14px/1.25 var(--sans);letter-spacing:.04em}
 /* Menú */
 .menu{background:var(--cream);color:var(--ink);border-radius:34px;padding:clamp(26px,5vw,56px);border:3px solid var(--gold);box-shadow:0 0 0 8px var(--red-d),0 0 0 10px var(--gold-d),0 24px 50px rgba(0,0,0,.35);position:relative}
 .menu h3{font:400 clamp(38px,6vw,54px)/1 var(--script);color:var(--red);margin:44px 0 6px;text-align:center}
@@ -116,11 +114,18 @@ footer{margin-top:80px;background:var(--red-dd);border-top:2px solid var(--gold-
     <h2>Sabores de temporada</h2>
     <p class="sub">Algunos platillos de la noche</p>
     <div class="gal" id="gal">
-      <figure><img src="img/platillo-1.jpg" alt="Platillo navideño Salvia Blanca" loading="lazy"></figure>
-      <figure><img src="img/platillo-2.jpg" alt="Platillo navideño Salvia Blanca" loading="lazy"></figure>
-      <figure><img src="img/platillo-3.jpg" alt="Platillo navideño Salvia Blanca" loading="lazy"></figure>
-      <figure><img src="img/platillo-4.jpg" alt="Platillo navideño Salvia Blanca" loading="lazy"></figure>
-      <figure><img src="img/platillo-5.jpg" alt="Platillo navideño Salvia Blanca" loading="lazy"></figure>
+      <figure><img src="img/ambiente.jpg" alt="Nochebuena en la mesa" loading="lazy" width="1200" height="1800"><figcaption>Nochebuena en la mesa</figcaption></figure>
+      <figure><img src="img/ensalada.jpg" alt="Ensalada Navideña" loading="lazy" width="1200" height="1800"><figcaption>Ensalada Navideña</figcaption></figure>
+      <figure><img src="img/betabel.jpg" alt="Betabel rostizado con jocoque" loading="lazy" width="1200" height="1800"><figcaption>Betabel rostizado con jocoque</figcaption></figure>
+      <figure><img src="img/crema-hongos.jpg" alt="Crema de hongos silvestres" loading="lazy" width="1200" height="1800"><figcaption>Crema de hongos silvestres</figcaption></figure>
+      <figure><img src="img/raviol.jpg" alt="Raviol de ricotta con ragú de costilla" loading="lazy" width="1200" height="1800"><figcaption>Raviol de ricotta con ragú de costilla</figcaption></figure>
+      <figure><img src="img/chamorro.jpg" alt="Chamorro de borrego braseado" loading="lazy" width="1200" height="1800"><figcaption>Chamorro de borrego braseado</figcaption></figure>
+      <figure><img src="img/salmon.jpg" alt="Salmón asado con frutos secos" loading="lazy" width="1200" height="1800"><figcaption>Salmón asado con frutos secos</figcaption></figure>
+      <figure><img src="img/filete.jpg" alt="Filete de res con gratín de papa" loading="lazy" width="1200" height="1800"><figcaption>Filete de res con gratín de papa</figcaption></figure>
+      <figure><img src="img/pato.jpg" alt="Pato añejado con cereza amarena" loading="lazy" width="1200" height="1800"><figcaption>Pato añejado con cereza amarena</figcaption></figure>
+      <figure><img src="img/selva-negra.jpg" alt="Pastel Selva Negra" loading="lazy" width="1200" height="1800"><figcaption>Pastel Selva Negra</figcaption></figure>
+      <figure><img src="img/tartin.jpg" alt="Tartín de manzana" loading="lazy" width="1200" height="1800"><figcaption>Tartín de manzana</figcaption></figure>
+      <figure><img src="img/tiramisu.jpg" alt="Tiramisú" loading="lazy" width="1200" height="1800"><figcaption>Tiramisú</figcaption></figure>
     </div>
   </section>
 
@@ -175,8 +180,5 @@ footer{margin-top:80px;background:var(--red-dd);border-top:2px solid var(--gold-
 </div></footer>
 
 <script>
-// Si una foto aún no existe, deja un marco vacío en lugar de imagen rota.
-document.querySelectorAll('#gal img').forEach(function(i){i.addEventListener('error',function(){i.remove();});});
-document.querySelectorAll('#gal figure').forEach(function(f){var i=f.querySelector('img');if(i)i.addEventListener('error',function(){f.classList.add('empty');});});
 </script>
 </body></html>
