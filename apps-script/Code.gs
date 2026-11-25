@@ -74,6 +74,7 @@ function cancelar_(s, key, g) {
 // Devuelve votos activos (nombre, hora y lugares) y notas (nombre, hora y texto) del grupo pedido (?grupo=)
 function doGet(e) {
   var g = grupo_(e && e.parameter && e.parameter.grupo);
+  if (e && e.parameter && e.parameter.ronda === '2') return doGetV2_(g);
   var rows = hoja_().getDataRange().getValues().slice(1);
   var votes = rows.filter(function (r) { return String(r[5]) !== 'Cancelado' && esGrupo_(r[6], g); }).map(function (r) {
     return { name: String(r[1]), at: new Date(r[0]).getTime(), first: idDe_(r[2]), second: idDe_(r[3]), third: idDe_(r[4]) };
@@ -93,6 +94,7 @@ function doPost(e) {
     var name = String(d.name || '').trim().slice(0, 40);
     if (!name) return json_({ ok: false });
     var g = grupo_(d.grupo);
+    if (Number(d.ronda) === 2) return postV2_(d, name, g);
 
     if (d.type === 'note') {
       var texto = String(d.text || '').trim().slice(0, 300);
@@ -122,4 +124,72 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+// ---------- RONDA 2: dos propuestas, cada persona elige UNA (?ronda=2) ----------
+// Pestaña "Votos V2": Fecha y hora, Nombre, Propuesta, Estado (Activo o Cancelado), Grupo.
+// Pestaña "Notas V2": Fecha y hora, Nombre, Nota, Grupo.
+var PROP = { p1: 'Propuesta 01', p2: 'Propuesta 02' };
+
+function hojaV2_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getSheetByName('Votos V2');
+  if (!s) { s = ss.insertSheet('Votos V2'); s.appendRow(['Fecha y hora', 'Nombre', 'Propuesta', 'Estado', 'Grupo']); }
+  return s;
+}
+
+function notasV2_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getSheetByName('Notas V2');
+  if (!s) { s = ss.insertSheet('Notas V2'); s.appendRow(['Fecha y hora', 'Nombre', 'Nota', 'Grupo']); }
+  return s;
+}
+
+function idPropDe_(label) {
+  for (var k in PROP) if (PROP[k] === label) return k;
+  return '';
+}
+
+function cancelarV2_(s, key, g) {
+  var rows = s.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (clave_(rows[i][1]) === key && esGrupo_(rows[i][4], g) && String(rows[i][3]) !== 'Cancelado') {
+      s.getRange(i + 1, 4).setValue('Cancelado');
+    }
+  }
+}
+
+function doGetV2_(g) {
+  var rows = hojaV2_().getDataRange().getValues().slice(1);
+  var votes = rows.filter(function (r) { return String(r[3]) !== 'Cancelado' && esGrupo_(r[4], g); }).map(function (r) {
+    return { name: String(r[1]), at: new Date(r[0]).getTime(), choice: idPropDe_(r[2]) };
+  }).filter(function (v) { return v.choice; });
+  var nrows = notasV2_().getDataRange().getValues().slice(1).filter(function (r) { return esGrupo_(r[3], g); }).slice(-100);
+  var notes = nrows.map(function (r) {
+    return { name: String(r[1]), text: String(r[2]), at: new Date(r[0]).getTime() };
+  });
+  return json_({ votes: votes, notes: notes });
+}
+
+// Se llama dentro de doPost (ya tiene el candado)
+function postV2_(d, name, g) {
+  if (d.type === 'note') {
+    var texto = String(d.text || '').trim().slice(0, 300);
+    if (!texto) return json_({ ok: false });
+    var n = notasV2_();
+    n.appendRow([new Date(), name, "'" + texto, g]);
+    n.getRange(n.getLastRow(), 1).setNumberFormat(FMT);
+    return json_({ ok: true });
+  }
+  var s = hojaV2_();
+  if (d.type === 'cancel') {
+    cancelarV2_(s, clave_(name), g);
+    return json_({ ok: true });
+  }
+  if (!PROP[d.choice]) return json_({ ok: false });
+  // El voto anterior de esta persona queda como Cancelado y solo cuenta el nuevo
+  cancelarV2_(s, clave_(name), g);
+  s.appendRow([new Date(), name, PROP[d.choice], 'Activo', g]);
+  s.getRange(s.getLastRow(), 1).setNumberFormat(FMT);
+  return json_({ ok: true });
 }
